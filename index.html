@@ -467,6 +467,41 @@ a,button,label{-webkit-tap-highlight-color:rgba(8,157,152,.18)}
   .chaps button{font-size:13.5px;padding:8px 13px;min-height:40px}
 }
 
+/* ---------- seguridad (contenido del Depto. de Laboratorios) ---------- */
+.segvids{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:20px}
+.segvid{padding:12px;display:grid;gap:12px;align-content:start}
+.segvid video{width:100%;aspect-ratio:9/16;border-radius:4px;background:var(--azul);display:block;object-fit:cover}
+.segvid h3{font-size:21px;line-height:1.05}
+.segvid p{font-size:14px;color:var(--suave);margin-top:4px}
+.avisar{margin-top:22px;background:var(--azul);color:var(--blanco);border-radius:6px;padding:22px 24px;position:relative;overflow:hidden}
+.avisar::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--verde)}
+.avisar .hd{display:flex;align-items:center;gap:12px}
+.avisar .hd .ic{width:30px;height:30px;color:#7FD6D2}
+.avisar h2{color:var(--blanco);font-size:clamp(24px,2.6vw,32px);text-transform:uppercase}
+.avl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.av{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.18);border-radius:4px;padding:12px 14px}
+.av .ic{width:28px;height:28px;color:#7FD6D2}
+.av b{display:block;font-family:var(--titulo);font-size:19px;line-height:1.05}
+.av span span{font-size:15px;color:#C9D6E6}
+.resid,.emerg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.res,.em{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:18px}
+.res{border-left:8px solid var(--azul)}
+.res .ic,.em .ic{width:36px;height:36px;stroke-width:1.6}
+.res b,.em b{font-family:var(--titulo);font-size:20px;display:block;line-height:1.1}
+.res span span,.em span span{font-size:14.5px;color:var(--suave)}
+.fuego{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px}
+.fg{padding:20px 22px}
+.fg h3{display:flex;align-items:center;gap:10px;font-size:23px;text-transform:uppercase;margin-bottom:12px}
+.fg h3 .ic{width:30px;height:30px}
+.fg.big{background:var(--celeste);border-color:var(--celeste)}
+ul.ok{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+ul.ok li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:15.5px}
+ul.ok li::before{content:"";width:22px;height:22px;margin-top:1px;border-radius:50%;background:var(--verde) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4L18 8' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.sbox.segu{border-left:6px solid var(--verde)}
+.sbox .more{color:var(--verde);font-weight:700;font-size:14.5px;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+@media (max-width:980px){.segvids{grid-template-columns:repeat(2,minmax(0,1fr))} .avl{grid-template-columns:repeat(2,minmax(0,1fr))} .fuego{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.ficha .sbox.segu{order:11;margin-top:16px} .segvids{gap:12px} .segvid h3{font-size:17px} .segvid p{display:none} .avl{grid-template-columns:minmax(0,1fr)}}
+
 /* ---------- equipos en 3D ---------- */
 #x3d{position:fixed;left:0;right:0;bottom:0;top:calc(var(--navh) + 10px + env(safe-area-inset-top,0px));z-index:40;overflow:hidden;background:radial-gradient(120% 90% at 50% 18%,#FFFFFF 0%,#F1F4F6 46%,#E7ECEF 100%)}
 #x3stage{position:absolute;inset:0}
@@ -566,7 +601,7 @@ a,button,label{-webkit-tap-highlight-color:rgba(8,157,152,.18)}
     </div>
     <div><h4>Equipos</h4><div id="footeq"></div></div>
     <div><h4>Recursos</h4><a href="#videos">Videos</a><a href="#manuales">Manuales</a><a href="#3d">Equipos en 3D</a></div>
-    <div><h4>Seguridad</h4><a href="#seguridad">Salidas de emergencia</a><a href="#seguridad">Manejo de residuos</a><a href="#seguridad">Normas del laboratorio</a></div>
+    <div><h4>Seguridad</h4><a href="#seguridad">Normas del laboratorio</a><a href="#seguridad">Manejo de residuos</a><a href="#seguridad">Qué hacer ante un accidente</a><a href="#seguridad">Incendio y evacuación</a></div>
     <div class="legal"><span>Universidad Nacional de Moreno · Laboratorio de Ciencias</span><span>Prototipo · TP Sistema de Interfaz Situada · Taller de Diseño Multimedial 4</span></div>
   </div>
 </footer>
@@ -746,6 +781,7 @@ function buildPH(){
   };
   const fpos = (u,v) => { face.updateMatrixWorld(true); const p = uv(u,v,.2); face.localToWorld(p); g.worldToLocal(p); return p; };
   g.updateMatrixWorld(true);
+  const kpos = (u,v) => bpos(.472 + (u-.472)*1.9, .63 + (v-.63)*2.2);
   const pins = [
     { n:1, name:"Pantalla", desc:"Muestra el pH, la temperatura y la fecha. El ATC indica que la temperatura se compensa sola.", pos:()=>fpos(.62,.25), act:()=>{ st.on=!st.on; return st.on? "Pantalla encendida" : "Pantalla apagada"; }, hint:"Tocá de nuevo para apagarla o encenderla." },
     { n:2, name:"Teclas CAL · OK · SAVE", desc:"CAL entra a la calibración, OK confirma y SAVE guarda la lectura. Las flechas cambian el modo de medición.", pos:()=>fpos(.48,.815) },
@@ -1089,7 +1125,99 @@ function buildAG(){
   return { group:g, pins, update, cam:{ target:[0,7,1], dir:[.3,.52,.8], dist:80 }, extent:34 };
 }
 
-const BUILD = { phmetro:buildPH, balanza:buildBAL, destilador:buildDES, microscopio:buildMIC, agitador:buildAG };
+function buildSART(){
+  const g = new T.Group(), st = { dip:1, dipT:1, mode:"pH", cal:0, calT:0, t:0, val:7.00 };
+  const cream = new T.MeshPhysicalMaterial({ color:0xC9BB86, roughness:.48, clearcoat:.25, clearcoatRoughness:.4 });
+  const metal = new T.MeshPhysicalMaterial({ color:0xA3A9AE, roughness:.42, metalness:.35, clearcoat:.2 });
+  const grayB = new T.MeshPhysicalMaterial({ color:0x8E959B, roughness:.7, metalness:.15 });
+  // cuerpo: placa vertical-inclinada (como en la foto)
+  const W = 13, H = 22.8, Tk = 2.2;
+  const body = new T.Group(); body.position.set(-4, 0, 3); body.rotation.x = -.13; g.add(body);
+  mesh(rbox(W, Tk, H, .9), cream, 0, Tk/2, 0, body);
+  const fw = W - .5, fh = H - .5;
+  const face = new T.Mesh(new T.PlaneGeometry(fw, fh), new T.MeshPhysicalMaterial({ map:loadTex("sart_face.jpg"), color:0xB4B4B0, roughness:.5, clearcoat:.2, clearcoatRoughness:.4 }));
+  face.rotation.x = -Math.PI/2; face.position.y = Tk + .015; face.receiveShadow = true; body.add(face);
+  const fp = (u,v,dy=0) => V(-fw/2 + u*fw, Tk + .03 + dy, -fh/2 + v*fh);
+  // pantalla LCD (segmentos)
+  const lu0=.2, lu1=.8, lv0=.265, lv1=.52, lw=(lu1-lu0)*fw, lh=(lv1-lv0)*fh;
+  const lcdT = canvasTex(600, 440, ()=>{});
+  const lcd = new T.Mesh(new T.PlaneGeometry(lw, lh), new T.MeshStandardMaterial({ map:lcdT, roughness:.35 }));
+  lcd.rotation.x = -Math.PI/2; lcd.position.copy(fp((lu0+lu1)/2,(lv0+lv1)/2,.01)); body.add(lcd);
+  const glassP = new T.Mesh(new T.PlaneGeometry(lw+.2, lh+.2), new T.MeshPhysicalMaterial({ color:0x000000, roughness:.04, clearcoat:1, transparent:true, opacity:.12 }));
+  glassP.rotation.x = -Math.PI/2; glassP.position.copy(lcd.position).add(V(0,.02,0)); body.add(glassP);
+  let lastTxt = "";
+  const drawLCD = () => { const S = st.cal > .5 ? "Std" : st.mode; const v = st.val.toFixed(2); const key = S + v + (st.stable?1:0); if(key === lastTxt) return; lastTxt = key;
+    const x = lcdT.userData.ctx, Wc = 600, Hc = 440; x.fillStyle = "#AEB8A8"; x.fillRect(0,0,Wc,Hc);
+    const gr = x.createLinearGradient(0,0,0,Hc); gr.addColorStop(0,"rgba(255,255,255,.1)"); gr.addColorStop(1,"rgba(0,0,0,.1)"); x.fillStyle = gr; x.fillRect(0,0,Wc,Hc);
+    x.fillStyle = "#1F2A23"; x.font = "bold 46px Arial"; x.fillText(st.mode === "mV" ? "mV" : "pH", 30, 64);
+    if(st.cal > .5){ x.font = "bold 38px Arial"; x.fillText("STANDARDIZE", 240, 62); }
+    sevenSeg(x, st.mode === "mV" ? " 12.3" : v.padStart(5," "), 70, 120, 160, "#1F2A23");
+    ["4","7","10"].forEach((b,i) => { x.strokeStyle = "#1F2A23"; x.lineWidth = 5; x.strokeRect(30 + i*90, 360, 76, 54); x.font = "bold 34px Arial"; x.fillText(b, 52 + i*90 - (b.length>1?10:0), 400); });
+    if(st.stable){ x.fillRect(500, 352, 70, 70); x.fillStyle = "#AEB8A8"; x.font = "bold 56px Arial"; x.fillText("S", 516, 408); }
+    lcdT.needsUpdate = true; };
+  // teclas en relieve (sobre la foto)
+  const keyMat = new T.MeshPhysicalMaterial({ color:0xF0DC9A, roughness:.45, clearcoat:.3, transparent:true, opacity:.55 });
+  const stdMat = new T.MeshPhysicalMaterial({ color:0xF29A1C, roughness:.4, clearcoat:.4, transparent:true, opacity:.55 });
+  const KEYS = { Mode:[.309,.621,.86], Setup:[.474,.588,.86], Enter:[.634,.637,.86], Std:[.471,.673,1.1] };
+  const keyM = {}; Object.entries(KEYS).forEach(([k,[u,v,r]]) => { const m = mesh(cyl(r, r*1.04, .22, 40), k === "Std" ? stdMat : keyMat, 0,0,0, body); m.position.copy(fp(u,v,.1)); if(k === "Std") m.scale.set(1.25,1,.85); keyM[k] = m; });
+  // base redonda, columna y brazo articulado
+  const bx = 8.5, bz = -6;
+  mesh(cyl(8.6, 8.9, .9, 64), grayB, bx, .45, bz, g);
+  mesh(cyl(.75, .75, 17, 24), metal, bx-3, 9.2, bz-3, g);
+  mesh(cyl(1.4, 1.4, 1.4, 24), metal, bx-3, 1.4, bz-3, g);
+  const bar = (a, b, w, h, mat) => { const A = V(...a), B = V(...b), L = A.distanceTo(B); const m = mesh(rbox(w, h, L, Math.min(w,h)*.3), mat, 0,0,0, g); m.position.copy(A).add(B).multiplyScalar(.5); m.lookAt(B); return m; };
+  const P0 = [bx-3, 16.6, bz-3], P1 = [bx+5.5, 13.2, bz+6.5], P2 = [bx+6.8, 13.0, bz+7.5];
+  mesh(rbox(2.4, 2.2, 2.4, .5), metal, P0[0], P0[1], P0[2], g);
+  bar([P0[0]+.6, P0[1]+.7, P0[2]], [P1[0]+.4, P1[1]+.6, P1[2]], .7, .9, metal);
+  bar([P0[0]-.6, P0[1]-.6, P0[2]], [P1[0]-.4, P1[1]-.5, P1[2]], .7, .9, metal);
+  mesh(rbox(2, 2, 2.2, .5), metal, P1[0], P1[1], P1[2], g);
+  const holder = new T.Group(); holder.position.set(P2[0]+1.6, P2[1], P2[2]+1.2); g.add(holder);
+  mesh(rbox(4.2, 1.6, 3.2, .5), metal, -1, 0, 0, holder);
+  mesh(new T.TorusGeometry(.9, .28, 12, 32).rotateX(Math.PI/2), metal, .6, .1, 0, holder);
+  // electrodo
+  const elec = new T.Group(); holder.add(elec);
+  mesh(cyl(.6,.6,2.6), new T.MeshPhysicalMaterial({ color:0xE7DDB8, roughness:.5 }), .6, 2.2, 0, elec);
+  mesh(cyl(.55,.55,9.6), new T.MeshPhysicalMaterial({ color:0xEDE9DC, roughness:.35, clearcoat:.5 }), .6, -4.2, 0, elec);
+  mesh(cyl(.42,.5,1.4), MAT.glassThin, .6, -9.6, 0, elec);
+  mesh(new T.SphereGeometry(.42, 24, 16), MAT.glassThin, .6, -10.3, 0, elec);
+  // vaso con muestra
+  const bk = new T.Group(); bk.position.set(holder.position.x + .6, .9, holder.position.z); g.add(bk);
+  mesh(beakerGeo(2.6, 5.6), MAT.glass, 0,0,0, bk);
+  mesh(beakerLiquidGeo(2.6, 3.0), liquid(0xE9C45E, 5.5), 0,0,0, bk);
+  bk.add(graduations(2.62, 5.6*.8, 4).translateY(2.6));
+  // cables
+  mesh(tube([[-4,2,-8.4],[-4,1.2,-11],[-8,.22,-15],[-22,.22,-19]], .2), MAT.rubber, 0,0,0, g);
+  const cable = mesh(tube([[0,0,0],[1,1,1],[2,2,2]], .12), MAT.rubber, 0,0,0, g); let lastDip = -1;
+  g.add(blob(40, 34, .36).translateX(3));
+  const update = (dt, t) => {
+    st.t = t; st.dip += (st.dipT - st.dip) * Math.min(1, dt*4);
+    elec.position.y = -.4 + (1-st.dip) * 6.2;
+    st.cal += (st.calT - st.cal) * Math.min(1, dt*6);
+    const target = st.calT ? 7.00 : (st.dipT ? 5.67 : 7.00);
+    st.val += (target - st.val) * Math.min(1, dt*1.6); st.stable = Math.abs(target - st.val) < .01;
+    drawLCD();
+    if(Math.abs(st.dip - lastDip) < .002) return; lastDip = st.dip;
+    const a = V(); elec.localToWorld(a.set(.6, 3.4, 0)); g.worldToLocal(a);
+    const pts = [[a.x,a.y,a.z],[a.x-.4,a.y+2.2,a.z-.4],[a.x-3,a.y+2.6,a.z-5],[0,3.2,-10],[-3.5,2.2,-8.8]];
+    cable.geometry.dispose(); cable.geometry = tube(pts, .12, 80, 8);
+  };
+  const bpos = (u,v,dy=.5) => { body.updateMatrixWorld(true); const p = fp(u,v,dy); body.localToWorld(p); g.worldToLocal(p); return p; };
+  const kpos = (u,v) => bpos(.472 + (u-.472)*1.9, .63 + (v-.63)*2.2);
+  const press = k => { keyM[k].position.y -= .12; setTimeout(() => keyM[k].position.y += .12, 160); };
+  g.updateMatrixWorld(true);
+  const pins = [
+    { n:1, name:"Pantalla", desc:"Muestra el valor de pH o mV, los buffer guardados (4, 7, 10) y la S cuando la lectura es estable.", pos:()=>bpos(.62,.33) },
+    { n:2, name:"Mode", desc:"Cambia entre pH y mV.", pos:()=>kpos(.309,.621), act:()=>{ press("Mode"); st.mode = st.mode === "pH" ? "mV" : "pH"; return `Modo ${st.mode}`; }, hint:"Tocá de nuevo para cambiar de modo." },
+    { n:3, name:"Setup", desc:"Configuración: borrar la calibración (Clear) y elegir el juego de buffers.", pos:()=>kpos(.474,.588) },
+    { n:4, name:"Enter", desc:"Confirma la opción elegida.", pos:()=>kpos(.634,.637) },
+    { n:5, name:"Standardize", desc:"Calibra: reconoce el buffer y lo guarda cuando la lectura es estable.", pos:()=>kpos(.471,.673), act:()=>{ press("Std"); st.calT = st.calT ? 0 : 1; st.mode = "pH"; return st.calT ? "Calibrando con el buffer" : "Modo medición"; }, hint:"Tocá de nuevo para volver a medir." },
+    { n:6, name:"Electrodo", desc:"Mide el pH al sumergirse en la muestra. Entre muestras se enjuaga con agua destilada y nunca se deja seco.", pos:()=>{ const p = V(); elec.localToWorld(p.set(.6,-3,.8)); g.worldToLocal(p); return p; }, act:()=>{ st.dipT = st.dipT ? 0 : 1; return st.dipT ? "Electrodo dentro de la muestra" : "Electrodo fuera de la muestra"; }, hint:"Tocá de nuevo para subirlo o bajarlo." },
+    { n:7, name:"Brazo portaelectrodo", desc:"Sostiene el electrodo a la altura justa para que no toque el fondo del vaso.", pos:()=>V(bx+1, 15.6, bz+2) },
+  ];
+  return { group:g, pins, update, cam:{ target:[2,5,0], dir:[.3,.62,.73], dist:64 }, camM:{ target:[2.5,6,2], dir:[-.4,.72,.56], dist:122 }, extent:34 };
+}
+
+const BUILD = { sartorius:buildSART, phmetro:buildPH, balanza:buildBAL, destilador:buildDES, microscopio:buildMIC, agitador:buildAG };
 
 // ---------- escena ----------
 function init(rootEl){
@@ -1119,7 +1247,7 @@ function init(rootEl){
 }
 function resize(){ if(!renderer) return; const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h, false); camera.aspect = w/h; if(w/h < .8) camera.setViewOffset(w, h, 0, Math.round(h*.09), w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
 function frame(def, instant){
-  const d = def.cam, dir = V(...d.dir).normalize(), tg = V(...d.target), dist = d.dist * (camera.aspect < 1.2 ? Math.min(2.1, 1.05/camera.aspect) : 1);
+  const mob = camera.aspect < .8 && def.camM, d = mob ? def.camM : def.cam, dir = V(...d.dir).normalize(), tg = V(...d.target), dist = mob ? d.dist : d.dist * (camera.aspect < 1.2 ? Math.min(2.1, 1.05/camera.aspect) : 1);
   const pos = tg.clone().addScaledVector(dir, dist);
   if(instant){ camera.position.copy(pos); controls.target.copy(tg); }
   else fly = { t:0, p0:camera.position.clone(), t0:controls.target.clone(), p1:pos, t1:tg };
@@ -1131,7 +1259,7 @@ function show(id, meta){
   if(!built[id]){ const def = BUILD[id](); built[id] = def; scene.add(def.group); }
   Object.entries(built).forEach(([k,d]) => d.group.visible = k === id);
   const def = built[id], first = !current; current = { id, def };
-  ui.title.innerHTML = meta.title; ui.sub.textContent = meta.sub; ui.ficha.href = "#" + id;
+  ui.title.innerHTML = meta.title; ui.sub.textContent = meta.sub; ui.ficha.href = meta.ficha || ("#" + id);
   ui.eye.hidden = !def.eye; ui.eye.classList.remove("big");
   ui.card.hidden = true; controls.autoRotate = !reduce;
   ui.pins.innerHTML = ""; pinEls = def.pins.map(p => { const b = document.createElement("button"); b.type = "button"; b.className = "x3pin"; b.textContent = p.n; b.setAttribute("aria-label", p.name);
@@ -1222,6 +1350,23 @@ const P = {
   drop:'<path d="M12 3.5c3 4 5.5 6.8 5.5 10a5.5 5.5 0 01-11 0c0-3.2 2.5-6 5.5-10z"/>',
   speed:'<path d="M4 16a8 8 0 0116 0"/><path d="M12 16l4-5"/>',
   info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.8" r=".6"/>',
+  phone:'<path d="M6 3h4l2 5-2.5 1.5a11 11 0 005 5L16 12l5 2v4a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z"/>',
+  bag:'<path d="M6 8h12l-1 13H7z"/><path d="M9 8V6a3 3 0 016 0v2"/>',
+  jug:'<path d="M8 3h6v3l3 3v11a1 1 0 01-1 1H6a1 1 0 01-1-1V9l3-3z"/><path d="M5 13h12"/>',
+  glass:'<path d="M6 3h12l-2 18H8z"/><path d="M9 8l3 4-2 3 4 3"/>',
+  needle:'<path d="M18 3l3 3M16 5l3 3M14 7l3 3-8 8-3-3z"/><path d="M6 15l-3 6 6-3"/>',
+  bolt:'<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
+  wind:'<path d="M3 8h11a3 3 0 10-3-3M3 12h15a3 3 0 11-3 3M3 16h7"/>',
+  roll:'<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16M8 7l8 10"/>',
+  ext:'<path d="M9 8h6v13H9z"/><path d="M10 8V5h4v3"/><path d="M14 5h3l2 2"/><path d="M9 13h6"/>',
+  teacher:'<circle cx="9" cy="7" r="3"/><path d="M3 21c0-4 2.6-7 6-7s6 3 6 7"/><path d="M15 4h6v6h-6z"/>',
+  mouth:'<path d="M4 12c2-3 5-4 8-4s6 1 8 4c-2 3-5 4-8 4s-6-1-8-4z"/><path d="M4 12h16"/>',
+  label:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  desk:'<path d="M3 10h18M5 10v10M19 10v10"/><path d="M8 10V6h8v4"/>',
+  fire:'<path d="M12 21c-4 0-6.5-2.7-6.5-6.2 0-3.5 2.6-5.3 3.6-8.3 1.6 1.8 2.3 3.2 2.3 4.6 1.5-1.2 2.4-2.8 2.4-5.1 2.8 2.3 4.7 5.6 4.7 8.8 0 3.5-2.5 6.2-6.5 6.2z"/>',
+  tap:'<path d="M4 9h9a3 3 0 013 3v1"/><path d="M8 9V6h3v3"/><path d="M16 16v1M16 19v1"/>',
+  spill:'<path d="M5 4h6l-1 5H6z"/><path d="M8 9c0 3 3 4 6 5s6 2 6 5H6c0-2 1-3 2-4"/>',
+  meet:'<circle cx="8" cy="8" r="2.5"/><circle cx="16" cy="8" r="2.5"/><path d="M3 20c0-3 2-5 5-5s5 2 5 5M11 20c0-3 2-5 5-5s5 2 5 5"/>',
 };
 const I = (k, cls="ic", extra="") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true" ${extra}>${P[k]}</svg>`;
 const PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4.5l13 7.5-13 7.5z"/></svg>';
@@ -1240,7 +1385,7 @@ const EI = (id, extra="") => `<svg class="eqi" viewBox="0 0 48 48" aria-hidden="
 // ---------- contenido ----------
 const EPP = { g:["glove","Guantes"], c:["coat","Guardapolvo"], a:["goggles","Antiparras"] };
 const EQUIPOS = [
- { id:"phmetro", no:"01", nombre:"pHmetro", sub:"Medición de pH, mV y temperatura", ubic:"Mesada", estado:"Disponible", tiene3d:true,
+ { id:"phmetro", segu:["Los buffer y las muestras usadas van al bidón, no a la pileta.", "Si te salpica en los ojos: lavaojos 15 minutos."], no:"01", nombre:"pHmetro", sub:"Medición de pH, mV y temperatura", ubic:"Mesada", estado:"Disponible", tiene3d:true,
    foto:"img/phmetro.jpg", pos:"center 78%",
    que:"Mide qué tan ácida o básica es una solución a través de un electrodo que se sumerge en la muestra. Antes de medir hay que calibrarlo con soluciones buffer.",
    specs:[["thermo","Mide","pH · mV · °C"],["layers","Modelos","DLAB y Sartorius"],["drop","Antes de medir","Calibrar con buffers"]],
@@ -1258,7 +1403,7 @@ const EQUIPOS = [
    errores:["Dejar el electrodo seco: se daña.","Medir sin calibrar.","Pasar de una muestra a otra sin enjuagar.","Apoyar el electrodo en el fondo del vaso."],
    caps:["¿Qué es?","Antes de empezar","Encender","Calibrar","Enjuagar","Medir","Leer el resultado","Al terminar"] },
 
- { id:"balanza", no:"02", nombre:"Balanza granataria", sub:"Pesada de reactivos y muestras", ubic:"Mesada", estado:"Disponible", tiene3d:true,
+ { id:"balanza", segu:["Si pesás polvos tóxicos, usá barbijo descartable.", "Limpiá enseguida lo que se derrame sobre el plato."], no:"02", nombre:"Balanza granataria", sub:"Pesada de reactivos y muestras", ubic:"Mesada", estado:"Disponible", tiene3d:true,
    foto:"img/balanza.jpg", pos:"center 62%",
    que:"Balanza electrónica de uso general. Siempre se pesa sobre un recipiente, que se descuenta con la tecla de tara.",
    specs:[["scale","Resolución","0,1 g"],["info","Tecla clave","Zero/Tare"],["layers","Modelo","Vibra serie SJ"]],
@@ -1271,7 +1416,7 @@ const EQUIPOS = [
    errores:["Pesar directamente sobre el plato.","Apoyarse en la mesada mientras pesa.","Superar la capacidad máxima."],
    caps:["¿Qué es?","Antes de empezar","Tarar","Pesar","Al terminar"] },
 
- { id:"destilador", no:"03", nombre:"Destilador", sub:"Separación de líquidos por ebullición", ubic:"Campana", estado:"Disponible", tiene3d:true,
+ { id:"destilador", segu:["Trabajá siempre dentro de la campana.", "Nunca calientes un sistema cerrado.", "Si te quemás con el manto: agua fría de 10 a 15 minutos."], no:"03", nombre:"Destilador", sub:"Separación de líquidos por ebullición", ubic:"Campana", estado:"Disponible", tiene3d:true,
    foto:"img/destilador.jpg",
    que:"Montaje de varias piezas que se arma dentro de la campana de extracción: manto calefactor, balón, termómetro, refrigerante con mangueras, soporte con pinzas y recipiente colector.",
    specs:[["pin","Dónde","Campana de extracción"],["flame","Calor","Manto calefactor"],["drop","Refrigeración","Circulación de agua"]],
@@ -1284,7 +1429,7 @@ const EQUIPOS = [
    errores:["Calentar sin agua en el refrigerante.","Conectar las mangueras al revés.","Cerrar el sistema por completo."],
    caps:["¿Qué es?","Antes de empezar","Armar","Destilar","Al terminar"] },
 
- { id:"microscopio", no:"04", nombre:"Microscopio óptico", sub:"Observación de muestras con aumento", ubic:"Mesada", estado:"Disponible", tiene3d:true,
+ { id:"microscopio", segu:["Si se rompe un portaobjetos, envolvelo en papel y llevalo a la caja de vidrio.", "Antes de limpiar con alcohol, fijate que no haya mecheros encendidos."], no:"04", nombre:"Microscopio óptico", sub:"Observación de muestras con aumento", ubic:"Mesada", estado:"Disponible", tiene3d:true,
    foto:"img/microscopio.jpg", pos:"center 72%",
    que:"Microscopio binocular para observar preparados. Se empieza siempre con el menor aumento y se enfoca de a poco.",
    specs:[["eye","Objetivos","4x · 10x · 40x · 100x"],["layers","Ocular","10x"],["search","Aumento total","Hasta 1000x"]],
@@ -1297,7 +1442,7 @@ const EQUIPOS = [
    errores:["Empezar con el aumento más alto.","Usar el 100x sin aceite de inmersión.","Limpiar las lentes con papel común."],
    caps:["¿Qué es?","Partes","Enfocar","Cambiar de objetivo","Al terminar"] },
 
- { id:"agitador", no:"05", nombre:"Agitador magnético con placa calefactora", corto:"Agitador magnético", sub:"Calentar y mezclar soluciones", ubic:"Mesada", estado:"Disponible", tiene3d:true,
+ { id:"agitador", segu:["Nunca calientes un recipiente cerrado.", "No apuntes la boca del recipiente hacia nadie.", "Si te quemás con la placa: agua fría de 10 a 15 minutos."], no:"05", nombre:"Agitador magnético con placa calefactora", corto:"Agitador magnético", sub:"Calentar y mezclar soluciones", ubic:"Mesada", estado:"Disponible", tiene3d:true,
    foto:"img/agitador.jpg", pos:"center 66%",
    que:"Hace girar un buzo magnético dentro del recipiente y, si hace falta, calienta la placa. La placa sigue caliente un rato después de apagarla.",
    specs:[["thermo","Temperatura","0 a 100 °C"],["speed","Velocidad","Slow – Fast"],["layers","Modelo","Arcano 78HW-1"]],
@@ -1310,7 +1455,7 @@ const EQUIPOS = [
    errores:["Subir la velocidad de golpe: salpica.","Tocar la placa recién apagada.","Dejar el recipiente descentrado."],
    caps:["¿Qué es?","Antes de empezar","Agitar","Calentar","Al terminar"] },
 
- { id:"micropipetas", no:"06", nombre:"Sistema de micropipetas", corto:"Micropipetas", sub:"Transferencia de volúmenes pequeños", ubic:"Mesada", estado:"Disponible",
+ { id:"micropipetas", segu:["Nunca pipetees con la boca.", "Las puntas usadas van a la bolsa roja."], no:"06", nombre:"Sistema de micropipetas", corto:"Micropipetas", sub:"Transferencia de volúmenes pequeños", ubic:"Mesada", estado:"Disponible",
    foto:null,
    que:"Pipetas de volumen ajustable con puntas descartables. Se usan para medir y transferir volúmenes muy pequeños de líquido con precisión.",
    specs:[["drop","Volumen","Ajustable"],["layers","Puntas","Descartables"],["info","Émbolo","Dos topes"]],
@@ -1324,19 +1469,46 @@ const EQUIPOS = [
    caps:["¿Qué es?","Cargar","Descargar","Al terminar"] },
 ];
 const SEG = [
-  { id:"emergencia", icon:"exit", t:"Salidas de emergencia", d:"Recorrido y punto de encuentro" },
-  { id:"residuos", icon:"waste", t:"Manejo de residuos", d:"Dónde y cómo descartar cada residuo" },
-  { id:"incendio", icon:"flame", t:"Incendio y derrames", d:"Qué hacer y a quién avisar" },
-  { id:"normas", icon:"shield", t:"Normas del laboratorio", d:"Lo básico antes de cualquier práctica" },
+  { id:"normas", icon:"shield", t:"Normas del laboratorio", d:"Lo básico antes de cualquier práctica", video:"vid/normas.mp4", poster:"vid/normas.jpg" },
+  { id:"residuos", icon:"waste", t:"Manejo de residuos", d:"Qué va en cada bolsa y en el bidón", video:"vid/residuos.mp4", poster:"vid/residuos.jpg" },
+  { id:"accidentes", icon:"alert", t:"Qué hacer ante un accidente", d:"Quemaduras, cortes, piel y ojos", video:"vid/accidentes.mp4", poster:"vid/accidentes.jpg" },
+  { id:"incendio", icon:"flame", t:"Incendio y evacuación", d:"Avisar, apagar o salir", video:"vid/incendio.mp4", poster:"vid/incendio.jpg" },
 ];
+const AVISAR = [ ["teacher","Docente","Siempre primero"], ["phone","Enfermería","Interno 101"], ["phone","Bienestar Universitario","Interno 126"], ["phone","Limpieza y mantenimiento","Interno 153 · derrames"] ];
 const NORMAS = [
-  ["coat","Guardapolvo abrochado","Y calzado cerrado durante toda la práctica."],
-  ["hair","Pelo recogido","Sin bufandas ni accesorios que cuelguen."],
-  ["nofood","Sin comida ni bebida","No se come, no se bebe y no se guardan alimentos en el laboratorio."],
-  ["doc","Leé la guía antes","Conocé los pasos y riesgos de la práctica antes de empezar."],
-  ["alert","Avisá enseguida","Ante un accidente, un derrame o un equipo roto, avisale al docente."],
-  ["hands","Lavate las manos","Al terminar la práctica y antes de salir del laboratorio."],
+  ["coat","Guardapolvo abrochado","De algodón y manga larga, con zapatos cerrados."],
+  ["hair","Pelo recogido","Sin aros, pulseras ni collares colgando."],
+  ["goggles","Antiparras","Cuando haya riesgo de salpicaduras. Mejor sin lentes de contacto."],
+  ["nofood","Sin comida ni bebida","Tampoco fumar ni maquillarse en el laboratorio."],
+  ["desk","Mesada despejada","Mochilas, abrigos y libros, fuera del lugar de trabajo."],
+  ["label","Solo frascos con etiqueta","No uses un producto sin identificar ni lo cambies por otro."],
+  ["mouth","No pipetees con la boca","Usá siempre la micropipeta o la propipeta."],
+  ["teacher","Equipos con supervisión","No uses un equipo que no conocés ni trabajes solo."],
+  ["hands","Lavate las manos","Al terminar la práctica y antes de salir."],
 ];
+const RESIDUOS = [
+  ["bag","#2E3236","Bolsa negra","Residuos comunes."],
+  ["bag","#E0A82E","Bolsa amarilla","Residuos especiales. Si dudás, preguntá."],
+  ["bag","#D9534F","Bolsa roja","Patogénicos: puntas, guantes, placas de Petri y todo lo que tocó material biológico."],
+  ["jug","#21436A","Bidón","Líquidos peligrosos. Siempre tapado y sin mezclar sin consultar."],
+  ["glass","#21436A","Vidrio roto","Envuelto en papel, en una caja resistente. Nunca con la basura común."],
+  ["needle","#21436A","Agujas y bisturíes","Al contenedor especial para cortopunzantes."],
+];
+const EMERG = [
+  ["fire","Quemadura","Agua fría de 10 a 15 minutos. Si es grave, sin cremas y con asistencia médica."],
+  ["tap","Corte","Agua corriente 10 minutos. Chico: agua, jabón y apósito. Grande: asistencia médica."],
+  ["drop","Producto en la piel","Agua abundante 15 minutos y sacá la ropa contaminada. Si es mucho, ducha de seguridad."],
+  ["eye","Salpicadura en los ojos","Lavaojos 15 minutos con los párpados abiertos. Siempre al médico."],
+  ["wind","Inhalación","Llevá a la persona al aire libre y pedí asistencia médica."],
+  ["alert","Ingestión","Pedí asistencia. No le des nada de tomar ni provoques el vómito."],
+  ["bolt","Contacto eléctrico","Primero cortá la corriente. No toques a la persona con la piel."],
+  ["roll","Ropa en llamas","Al piso y rodar. Manta o ducha. Nunca un extintor sobre una persona."],
+  ["spill","Derrame grande","Alejá a la gente, ventilá y avisá al docente y al interno 126."],
+];
+const FUEGO = {
+  chico:["Si sabés usarlo, usá el extintor adecuado.","Alejá los productos inflamables.","Nunca uses agua sobre un solvente encendido."],
+  grande:["Apagá los equipos y salí por la ruta del plano.","Caminá rápido sin correr y cerrá las puertas.","Sin ascensor y sin volver a buscar nada.","En el punto de reunión, avisá si falta alguien."],
+};
 const byId = id => EQUIPOS.find(e => e.id === id);
 const shortName = e => e.corto || e.nombre;
 const eppHTML = keys => keys.map(k => `<span>${I(EPP[k][0])}${EPP[k][1]}</span>`).join("");
@@ -1385,7 +1557,7 @@ const eqCard = e => `
       <div class="row"><div class="tags"><span class="tag disp">${e.estado}</span>${e.tiene3d?'<span class="tag ok">3D</span>':""}${e.modelos.some(m=>m.video)?'<span class="tag disp">Con video</span>':'<span class="tag prod">Video pronto</span>'}</div>${I("arrow","ic arr")}</div>
     </div>
   </a>`;
-const vThumb = (label, poster) => `<div class="vthumb${poster?" img":""}"${poster?` style="background-image:url(${poster})"`:""}>${label?`<span class="lbl2">${label}</span>`:""}<span class="pl">${PLAY}</span></div>`;
+const vThumb = (label, poster) => `<div class="vthumb${poster?" img":""}"${poster?` style="background-image:url(${poster})"`:""}><span class="pl">${PLAY}</span></div>`;
 
 // ---------- vistas ----------
 function viewInicio(){
@@ -1493,8 +1665,7 @@ function viewFicha(e){
     uso:`<div><h3>Antes de empezar</h3><div class="epp">${eppHTML(e.epp)}</div></div>
          <div><h3>Paso a paso</h3><ol class="pasos">${m.pasos.map((t,i)=>`<li><span class="num">${i+1}</span><p>${esc(t)}</p></li>`).join("")}</ol></div>
          <div><h3>Al terminar</h3><div class="check" id="check">${e.final.map((t,i)=>`<label for="c-${i}"><input type="checkbox" id="c-${i}">${esc(t)}</label>`).join("")}</div>
-         <div class="done" id="done" hidden>${I("check")}Listo. El equipo queda preparado para el próximo grupo.</div></div>
-         <p class="note">Pasos provisorios: se validan con el responsable del laboratorio.</p>`,
+         <div class="done" id="done" hidden>${I("check")}Listo. El equipo queda preparado para el próximo grupo.</div></div>`,
     botones:`<div><h3>Qué hace cada botón</h3><div class="keys">${m.teclas.map(([k,d])=>`<div class="key"><kbd>${esc(k)}</kbd><span>${esc(d)}</span></div>`).join("")}</div></div>`,
     tecnica:`<div><h3>${esc(m.nombre)}</h3><dl class="data">${m.datos.map(([k,v])=>`<dt>${esc(k)}</dt><dd${v?"":' class="todo"'}>${v?esc(v):"Completar con el manual del equipo"}</dd>`).join("")}</dl></div>`,
   };
@@ -1520,22 +1691,22 @@ function viewFicha(e){
         <div class="tpanel" id="tp" role="tabpanel" aria-labelledby="t-${fichaState.tab}">${panel[fichaState.tab]}</div>
       </div>
       <aside class="side">
-        ${e.tiene3d?`<a class="go3d" href="#3d-${e.id}">${I("cube")}<span><b>Explorar en 3D</b><span>${e.id==="microscopio"?"Giralo, encendé la luz y enfocá una muestra.":"Giralo y tocá sus partes para conocerlas."}</span></span>${I("arrow")}</a>`:""}
+        ${e.tiene3d?`<a class="go3d" href="#3d-${e.id==="phmetro"&&m.nombre.startsWith("Sartorius")?"sartorius":e.id}">${I("cube")}<span><b>Explorar en 3D</b><span>${e.id==="microscopio"?"Giralo, encendé la luz y enfocá una muestra.":"Giralo y tocá sus partes para conocerlas."}</span></span>${I("arrow")}</a>`:""}
         ${m.video ? `<div class="card sbox vbox">
           <div class="hd"><h3>Video</h3><span class="tag disp">Disponible</span></div>
           <div class="vid has"><video id="fv" src="${m.video}" poster="${m.poster}" controls playsinline preload="none" aria-label="Video tutorial del ${esc(e.nombre)} ${esc(m.nombre)}"></video>
-            <div><p style="font-weight:600">Tutorial en motion graphics</p><p class="note" style="margin-top:4px">Vertical · ${m.dur} · se entiende sin sonido</p>
-            <p class="note" style="margin-top:10px">Tocá un capítulo para ir directo:</p>
+            <div><p class="note">Capítulos</p>
             <div class="chaps" style="margin-top:8px">${e.caps.map((c,i)=>`<button type="button" data-t="${m.capT[i]}">${esc(c)}</button>`).join("")}</div></div></div>
         </div>` : `<div class="card sbox vbox">
           <div class="hd"><h3>Video</h3><span class="tag prod">En producción</span></div>
-          <div class="vid">${vThumb("")}<div><p style="font-weight:600">Tutorial en motion graphics</p><p class="note" style="margin-top:4px">Vertical, para celular · menos de 1 minuto</p><div class="chaps" style="margin-top:10px">${e.caps.map(c=>`<span>${esc(c)}</span>`).join("")}</div></div></div>
+          <div class="vid">${vThumb("")}<div><p class="note">Capítulos</p><div class="chaps" style="margin-top:10px">${e.caps.map(c=>`<span>${esc(c)}</span>`).join("")}</div></div></div>
         </div>`}
         <div class="card sbox mbox">
           <div class="hd"><h3>Manual</h3><span class="tag prod">Próximamente</span></div>
           <p class="note">Manual del fabricante en PDF y guía rápida de LabGuía.</p>
           <span class="btn sec" aria-disabled="true">Descargar manual ${I("download")}</span>
         </div>
+        ${e.segu ? `<div class="card sbox segu"><div class="hd"><h3>Seguridad</h3>${I("shield","ic",'style="width:26px;height:26px"')}</div><ul class="ok">${e.segu.map(t=>`<li>${esc(t)}</li>`).join("")}</ul><a class="more" href="#seguridad">Ver normas del laboratorio ${I("arrow","ic",'style="width:18px;height:18px"')}</a></div>` : ""}
         <div class="card sbox seg">
           <div class="hd"><h3>Errores comunes</h3>${I("alert","ic",'style="width:26px;height:26px"')}</div>
           <ul class="no">${e.errores.map(t=>`<li><span>${esc(t)}</span></li>`).join("")}</ul>
@@ -1558,32 +1729,35 @@ function bindFicha(e){
 function viewSeguridad(){
   return `
   <section class="phead" style="padding-bottom:10px"><div class="slant" style="left:0;right:auto;width:min(16vw,220px);clip-path:polygon(0 0,100% 0,0 100%)"></div>${plus("right:6%;top:20%")}
-    <div class="wrap"><div><h1>Seguri<i>dad</i></h1><p class="lead">Normas del Laboratorio de Ciencias · UNM</p></div></div></section>
-  <section class="wrap" style="position:relative">
-    ${chev("right:-30px;top:52%",true)}
-    <div class="seg-grid" style="margin-top:20px">
-      <div class="segrows">
-        ${SEG.map(s=>`<div class="card segrow">${I(s.icon)}<div><h3>${s.t}</h3><p>${s.d}</p></div><span class="tag prod">Video pronto</span></div>`).join("")}
-        <p class="note">Los videos de seguridad se están produciendo junto con el responsable del laboratorio.</p>
-      </div>
-      <div>
-        <div class="brk" style="aspect-ratio:9/8"><img src="img/campana.jpg" alt="Campana de extracción del laboratorio" style="width:100%;height:100%;object-fit:cover"></div>
-        <div class="entrar"><div><h3>Antes de entrar</h3><p>Elementos de protección obligatorios</p></div><div class="epp3"><span title="Guardapolvo">${I("coat")}</span><span title="Guantes">${I("glove")}</span><span title="Antiparras">${I("goggles")}</span></div></div>
-      </div>
-    </div>
-    <div class="sech" style="margin-top:clamp(50px,7vw,90px)"><div><div class="kick">Siempre</div><h2>Normas básicas</h2></div><span class="bigno">02</span></div>
+    <div class="wrap"><div><h1>Seguri<i>dad</i></h1><p class="lead">Laboratorio de Ciencias · UNM</p></div></div></section>
+  <section class="wrap">
+    <div class="segvids">${SEG.map(s=>`<div class="card segvid" id="sv-${s.id}"><video src="${s.video}" poster="${s.poster}" controls playsinline preload="none" aria-label="Video: ${esc(s.t)}"></video><div><h3>${s.t}</h3><p>${s.d}</p></div></div>`).join("")}</div>
+    <div class="avisar"><div class="hd">${I("alert")}<h2>Ante cualquier accidente, avisá</h2></div>
+      <div class="avl">${AVISAR.map(([ic,t,d])=>`<div class="av">${I(ic)}<span><b>${t}</b><span>${d}</span></span></div>`).join("")}</div></div>
+
+    <div class="sech" style="margin-top:clamp(46px,6vw,80px)"><div><div class="kick">Siempre</div><h2>Normas básicas</h2></div></div>
     <div class="normas">${NORMAS.map(([ic,t,d])=>`<div class="card norma">${I(ic)}<span><b>${t}</b><span>${d}</span></span></div>`).join("")}</div>
-    <p class="note" style="margin-top:14px">Contenido a validar con el responsable del laboratorio.</p>
+
+    <div class="sech" style="margin-top:clamp(46px,6vw,80px)"><div><div class="kick">Al terminar</div><h2>Residuos</h2><p>Nunca tires productos ni material biológico por la pileta.</p></div></div>
+    <div class="resid">${RESIDUOS.map(([ic,c,t,d])=>`<div class="card res" style="border-left-color:${c}">${I(ic,"ic",`style="color:${c}"`)}<span><b>${t}</b><span>${d}</span></span></div>`).join("")}</div>
+
+    <div class="sech" style="margin-top:clamp(46px,6vw,80px)"><div><div class="kick">Primeros auxilios</div><h2>Qué hacer si…</h2><p>Proteger, avisar y socorrer. Avisale siempre al docente.</p></div></div>
+    <div class="emerg">${EMERG.map(([ic,t,d])=>`<div class="card em">${I(ic)}<span><b>${t}</b><span>${d}</span></span></div>`).join("")}</div>
+
+    <div class="sech" style="margin-top:clamp(46px,6vw,80px)"><div><div class="kick">Incendio</div><h2>Fuego y evacuación</h2><p>Mantené la calma, avisá al docente y al interno 126.</p></div></div>
+    <div class="fuego">
+      <div class="card fg"><h3>${I("ext")}Si el fuego es chico</h3><ul class="ok">${FUEGO.chico.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+      <div class="card fg big"><h3>${I("exit")}Si el fuego es grande</h3><ul class="ok">${FUEGO.grande.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+    </div>
   </section>`;
 }
 
 function viewVideos(){
   const items = [];
   EQUIPOS.forEach(e => e.modelos.forEach((m,mi) => { if(e.modelos.length === 1 && mi > 0) return; items.push({href:"#"+e.id, t:e.nombre, s:m.nombre, l:e.no, poster:m.poster, ok:!!m.video}); }));
-  SEG.forEach(s => items.push({href:"#seguridad", t:s.t, s:"Seguridad", l:"SEG"}));
+  SEG.forEach(s => items.push({href:"#seguridad", t:s.t, s:"Seguridad", l:"SEG", poster:s.poster, ok:!!s.video}));
   return pageHead("Vid<i>eos</i>", "Tutoriales cortos en motion graphics, en formato vertical para ver en el celular.", "03") + `
   <section class="wrap">
-    <div class="banner">${I("video")}<span><b>Ya están los videos de los equipos.</b> Duran menos de un minuto, se entienden sin sonido y están divididos en capítulos. El de micropipetas y los de seguridad están en producción.</span></div>
     <div class="vgrid">${items.map(x=>`<a class="vcard" href="${x.href}">${vThumb(x.l, x.poster)}<span><b>${pH(x.t)}</b><br><small>${esc(x.s)}</small></span>${x.ok?'<span class="tag disp" style="justify-self:start">Ver video</span>':'<span class="tag prod" style="justify-self:start">En producción</span>'}</a>`).join("")}</div>
   </section>`;
 }
@@ -1591,7 +1765,6 @@ function viewVideos(){
 function viewManuales(){
   return pageHead("Manu<i>ales</i>", "Manuales de los fabricantes y guías rápidas de cada equipo.", "04") + `
   <section class="wrap">
-    <div class="banner">${I("book")}<span><b>Los manuales se están reuniendo</b> con el responsable del laboratorio. Mientras tanto, cada ficha tiene su paso a paso.</span></div>
     <div class="mrows">${EQUIPOS.map(e=>`<div class="card mrow">${EI(e.id)}<div><h3>${pH(e.nombre)}</h3><p>${e.modelos.map(m=>esc(m.nombre)).join(" · ")}</p></div>
       <div class="acts"><a class="btn sec" href="#${e.id}">Ver ficha ${I("arrow")}</a><span class="btn sec" aria-disabled="true">Manual PDF ${I("download")}</span></div></div>`).join("")}</div>
   </section>`;
@@ -1600,6 +1773,7 @@ function viewManuales(){
 // ---------- 3D ----------
 const X3D = $("#x3d");
 const META3D = {}; EQUIPOS.filter(e => e.tiene3d).forEach(e => { META3D[e.id] = { title: e.id==="phmetro" ? '<i class="lc">pH</i>metro' : esc(shortName(e)), sub: e.modelos[0].nombre + (e.id==="agitador" ? " · con placa calefactora" : "") }; });
+{ const o = {}; Object.keys(META3D).forEach(k => { o[k] = META3D[k]; if(k==="phmetro"){ o[k].sw = "pHmetro DLAB"; o.sartorius = { title:'<i class="lc">pH</i>metro', sub:"Sartorius PB-11", sw:"pHmetro Sartorius", ficha:"#phmetro", icon:"phmetro" }; } }); Object.keys(META3D).forEach(k => delete META3D[k]); Object.assign(META3D, o); }
 let x3state = 0;
 function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
 async function start3D(id){
@@ -1612,7 +1786,7 @@ async function start3D(id){
     LG3D.init(X3D); x3state = 2; LG3D.show(id, META3D[id]);
   }catch(err){ x3state = 0; $("#x3load").textContent = "No se pudo cargar el modelo 3D. Revisá la conexión y volvé a intentar."; }
 }
-$("#x3switch").innerHTML = Object.keys(META3D).map(k => `<a href="#3d-${k}" data-id="${k}">${EI(k)}<span>${META3D[k].title.replace(/<[^>]+>/g,"")}</span></a>`).join("");
+$("#x3switch").innerHTML = Object.keys(META3D).map(k => `<a href="#3d-${k}" data-id="${k}">${EI(META3D[k].icon||k)}<span>${META3D[k].sw||META3D[k].title.replace(/<[^>]+>/g,"")}</span></a>`).join("");
 $("#x3close").onclick = () => { $("#x3card").hidden = true; document.querySelectorAll(".x3pin").forEach(p => p.classList.remove("sel")); };
 $("#x3eye").addEventListener("click", () => $("#x3eye").classList.remove("big"));
 
@@ -1639,7 +1813,7 @@ function render(keep){
   const id = (location.hash || "#inicio").slice(1) || "inicio";
   const e = byId(id);
   $("#mob").classList.remove("open"); $("#dd").classList.remove("open");
-  if(id !== lastRoute && e){ fichaState.model = 0; fichaState.tab = "uso"; }
+  if(id !== lastRoute && e){ fichaState.model = (id==="phmetro" && lastRoute==="3d-sartorius") ? 1 : 0; fichaState.tab = "uso"; }
   if(id === "microscopio3d"){ location.replace("#3d-microscopio"); return; }
   const is3d = id === "3d" || id.startsWith("3d-");
   X3D.hidden = !is3d; app.hidden = is3d; $("#foot").hidden = is3d; document.body.classList.toggle("lock", is3d);
