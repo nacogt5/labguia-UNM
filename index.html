@@ -236,8 +236,14 @@ p{margin:0}
 .ftags{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
 @media (max-width:900px){.fhero{grid-template-columns:minmax(0,1fr)} .fphoto{order:-1} .fphoto .no{display:none}}
 @media (max-width:560px){.specs{grid-template-columns:minmax(0,1fr)}}
-.fbody{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:26px;align-items:start;margin-top:clamp(40px,6vw,80px)}
-@media (max-width:980px){.fbody{grid-template-columns:minmax(0,1fr)}}
+.fbody{display:grid;grid-template-columns:minmax(320px,1fr) minmax(0,1.4fr);gap:26px;align-items:start;margin-top:clamp(40px,6vw,80px)}
+.fmain{display:grid;gap:16px;min-width:0}
+.fmain .side{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.fmain .side .go3d,.fmain .side .mbox{grid-column:1/-1}
+.fmain .side .mbox{order:3}
+.fvid .vid.has{grid-template-columns:minmax(0,1fr);gap:16px}
+.fvid .vid.has video{width:min(100%,calc((100vh - 140px)*9/16));min-width:260px;justify-self:center}
+@media (max-width:980px){.fbody{grid-template-columns:minmax(0,1fr)} .fvid .vid.has{grid-template-columns:260px 1fr} .fvid .vid.has video{width:100%;min-width:0}}
 .tabs{display:flex;gap:4px;border-bottom:2px solid var(--linea);padding:0 20px;overflow-x:auto}
 .tabs button{background:none;border:0;padding:16px 12px 13px;font-weight:600;font-size:16px;color:var(--suave);cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px;white-space:nowrap}
 .tabs button[aria-selected="true"]{color:var(--azul);border-bottom-color:var(--verde)}
@@ -370,7 +376,7 @@ a,button,label{-webkit-tap-highlight-color:rgba(8,157,152,.18)}
 @media (max-width:760px){
   /* ficha: primero qué equipo es, después el video y los pasos */
   .ficha{display:flex;flex-direction:column}
-  .ficha .fhero,.ficha .fhero > div:first-child,.ficha .fbody,.ficha .side{display:contents}
+  .ficha .fhero,.ficha .fhero > div:first-child,.ficha .fbody,.ficha .side,.ficha .fvid,.ficha .fmain{display:contents}
   .ficha .back{order:0;margin:14px 0 12px;font-size:15px;align-self:flex-start;min-height:40px}
   .ficha .fphoto{order:1;aspect-ratio:2/1;margin:0 0 4px}
   .ficha .kick{order:2;margin-top:18px;font-size:12px}
@@ -382,9 +388,9 @@ a,button,label{-webkit-tap-highlight-color:rgba(8,157,152,.18)}
   .ficha .models button{font-size:16px;padding:12px 8px 9px;min-height:48px}
   .ficha .ftags{order:7;margin-top:12px}
   .ficha .vbox{order:8;margin-top:18px}
-  .ficha .fbody > .card{order:9;margin-top:16px}
+  .ficha .fmain > .card{order:9;margin-top:16px}
   .ficha .go3d{order:10;margin-top:16px}
-  .ficha .side > .seg{order:11;margin-top:16px}
+  .ficha .side > .seg,.ficha .side > .segu{order:11;margin-top:16px}
   .ficha .mbox{order:12;margin-top:16px}
   .ficha .vid{grid-template-columns:104px 1fr;gap:16px}
   .ficha .vbox .vthumb .pl{width:46px;height:46px}
@@ -1691,12 +1697,7 @@ function viewFicha(e){
     </section>
 
     <section class="fbody">
-      <div class="card">
-        <div class="tabs" role="tablist" aria-label="Información del equipo">${tabs.map(([k,t])=>`<button role="tab" type="button" id="t-${k}" aria-selected="${fichaState.tab===k}" aria-controls="tp" data-t="${k}">${t}</button>`).join("")}</div>
-        <div class="tpanel" id="tp" role="tabpanel" aria-labelledby="t-${fichaState.tab}">${panel[fichaState.tab]}</div>
-      </div>
-      <aside class="side">
-        ${e.tiene3d?`<a class="go3d" href="#3d-${e.id==="phmetro"&&m.nombre.startsWith("Sartorius")?"sartorius":e.id}">${I("cube")}<span><b>Explorar en 3D</b><span>${e.id==="microscopio"?"Giralo, encendé la luz y enfocá una muestra.":"Giralo y tocá sus partes para conocerlas."}</span></span>${I("arrow")}</a>`:""}
+      <div class="fvid">
         ${m.video ? `<div class="card sbox vbox">
           <div class="hd"><h3>Video</h3><span class="tag disp">Disponible</span></div>
           <div class="vid has"><video id="fv" src="${m.video}" poster="${m.poster}" controls playsinline preload="none" aria-label="Video tutorial del ${esc(e.nombre)} ${esc(m.nombre)}"></video>
@@ -1706,6 +1707,14 @@ function viewFicha(e){
           <div class="hd"><h3>Video</h3><span class="tag prod">En producción</span></div>
           <div class="vid">${vThumb("")}<div><p class="note">Capítulos</p><div class="chaps" style="margin-top:10px">${e.caps.map(c=>`<span>${esc(c)}</span>`).join("")}</div></div></div>
         </div>`}
+      </div>
+      <div class="fmain">
+      <div class="card">
+        <div class="tabs" role="tablist" aria-label="Información del equipo">${tabs.map(([k,t])=>`<button role="tab" type="button" id="t-${k}" aria-selected="${fichaState.tab===k}" aria-controls="tp" data-t="${k}">${t}</button>`).join("")}</div>
+        <div class="tpanel" id="tp" role="tabpanel" aria-labelledby="t-${fichaState.tab}">${panel[fichaState.tab]}</div>
+      </div>
+      <aside class="side">
+        ${e.tiene3d?`<a class="go3d" href="#3d-${e.id==="phmetro"&&m.nombre.startsWith("Sartorius")?"sartorius":e.id}">${I("cube")}<span><b>Explorar en 3D</b><span>${e.id==="microscopio"?"Giralo, encendé la luz y enfocá una muestra.":"Giralo y tocá sus partes para conocerlas."}</span></span>${I("arrow")}</a>`:""}
         <div class="card sbox mbox">
           <div class="hd"><h3>Manual</h3><span class="tag prod">Próximamente</span></div>
           <p class="note">Manual del fabricante en PDF y guía rápida de LabGuía.</p>
@@ -1717,6 +1726,7 @@ function viewFicha(e){
           <ul class="no">${e.errores.map(t=>`<li><span>${esc(t)}</span></li>`).join("")}</ul>
         </div>
       </aside>
+      </div>
     </section>
   </div>`;
 }
