@@ -29,6 +29,9 @@ body{margin:0;color:var(--azul);font-family:var(--cuerpo);font-size:16px;line-he
   background:var(--gris)}
 .plus,.chev{display:none!important}
 i.lc{color:inherit!important}
+.bigno,.fphoto .no{display:none!important}
+.vbox,.segvid{scroll-margin-top:calc(var(--navh,70px) + 16px)}
+.dd .panel::before{content:"";position:absolute;left:-10px;right:-10px;top:-16px;height:16px}
 body.lock{overflow:hidden}
 img{max-width:100%;display:block}
 a{color:inherit}
@@ -1564,8 +1567,8 @@ function bindSearch(input, box){
 // ---------- tarjetas ----------
 const eqCard = e => `
   <a class="card eqc" href="#${e.id}">
-    <div class="top"><h3>${pH(shortName(e))}</h3><span class="no">${e.no}</span></div>
-    <div class="ph">${e.foto?`<img src="${e.foto}" alt="${esc(e.nombre)} del laboratorio" loading="lazy" style="object-position:${e.pos||"center"}">`:EI(e.id)}</div>
+    <div class="top"><h3>${pH(shortName(e))}</h3></div>
+     <div class="ph">${e.foto?`<img src="${e.foto}" alt="${esc(e.nombre)} del laboratorio" loading="lazy" style="object-position:${e.pos||"center"}">`:EI(e.id)}</div>
     <div class="bot"><p>${esc(e.sub)}</p>
       <div class="row"><div class="tags"><span class="tag disp">${e.estado}</span>${e.tiene3d?'<span class="tag ok">3D</span>':""}${e.modelos.some(m=>m.video)?'<span class="tag disp">Con video</span>':'<span class="tag prod">Video pronto</span>'}</div>${I("arrow","ic arr")}</div>
     </div>
@@ -1687,7 +1690,7 @@ function viewFicha(e){
     <a class="back" href="#equipos">${I("back")}Volver a equipos</a>
     <section class="fhero">
       <div>
-        <div class="kick">${e.no} · Equipo</div>
+        <div class="kick">Equipo</div>
         <h1>${title}</h1>
         <p class="subt">${esc(e.sub)}</p>
         <p class="desc">${esc(e.que)}</p>
@@ -1695,7 +1698,7 @@ function viewFicha(e){
         ${e.modelos.length>1?`<div class="models" role="group" aria-label="Modelo">${e.modelos.map((x,i)=>`<button type="button" aria-pressed="${i===fichaState.model}" data-m="${i}">${esc(x.nombre)}</button>`).join("")}</div>`:""}
         <div class="ftags"><span class="tag disp">${e.estado}</span><span class="tag seg">${e.ubic}</span>${e.modelos.length===1?`<span class="tag mant">${esc(m.nombre)}</span>`:""}</div>
       </div>
-      <div class="fphoto brk r">${foto?`<img src="${foto}" alt="${esc(e.nombre)} ${esc(m.nombre)}">`:`<div style="width:100%;height:100%;background:var(--celeste);display:grid;place-items:center">${EI(e.id,'style="width:140px;height:140px"')}</div>`}<span class="no">${e.no}</span></div>
+      <div class="fphoto brk r">${foto?`<img src="${foto}" alt="${esc(e.nombre)} ${esc(m.nombre)}">`:`<div style="width:100%;height:100%;background:var(--celeste);display:grid;place-items:center">${EI(e.id,'style="width:140px;height:140px"')}</div>`}</div>
     </section>
 
     <section class="fbody">
@@ -1813,9 +1816,10 @@ function buildMenus(){
   $("#mob").innerHTML = `<a href="#inicio">Inicio</a><a href="#equipos">Equipos</a>${EQUIPOS.map(e=>`<a class="sub" href="#${e.id}">${pH(shortName(e))}</a>`).join("")}<a href="#videos">Videos</a><a href="#manuales">Manuales</a><a href="#seguridad">Seguridad</a><a href="#3d">Equipos en 3D</a>`;
   $("#footeq").innerHTML = EQUIPOS.map(e => `<a href="#${e.id}">${pH(shortName(e))}</a>`).join("");
   const dd = $("#dd"), btn = dd.querySelector("button");
-  btn.onclick = () => { const o = !dd.classList.contains("open"); dd.classList.toggle("open", o); btn.setAttribute("aria-expanded", o); };
-  dd.addEventListener("mouseenter", () => { if(matchMedia("(hover:hover)").matches){ dd.classList.add("open"); btn.setAttribute("aria-expanded", true); } });
-  dd.addEventListener("mouseleave", () => { dd.classList.remove("open"); btn.setAttribute("aria-expanded", false); });
+  const HOV = () => matchMedia("(hover:hover)").matches; let ddT;
+  btn.onclick = () => { const o = HOV() ? true : !dd.classList.contains("open"); dd.classList.toggle("open", o); btn.setAttribute("aria-expanded", o); };
+  dd.addEventListener("mouseenter", () => { clearTimeout(ddT); if(HOV()){ dd.classList.add("open"); btn.setAttribute("aria-expanded", true); } });
+  dd.addEventListener("mouseleave", () => { clearTimeout(ddT); ddT = setTimeout(() => { dd.classList.remove("open"); btn.setAttribute("aria-expanded", false); }, 400); });
   document.addEventListener("click", e => { if(!dd.contains(e.target)) { dd.classList.remove("open"); btn.setAttribute("aria-expanded", false); } });
   const bg = $("#burger"), mob = $("#mob");
   bg.onclick = () => { const o = !mob.classList.contains("open"); mob.classList.toggle("open", o); bg.setAttribute("aria-expanded", o); };
@@ -1825,12 +1829,16 @@ function buildMenus(){
 }
 function setActive(key){ document.querySelectorAll("[data-nav]").forEach(a => a.classList.toggle("on", a.dataset.nav === key)); }
 
-let lastRoute = "";
+let lastRoute = "", pendingPlay = null, pendingModel = null;
 function render(keep){
   const id = (location.hash || "#inicio").slice(1) || "inicio";
+  if(id.startsWith("v-")){ const k = id.slice(2);
+    if(SEG.some(x => x.id === k)){ pendingPlay = "sv-" + k; location.replace("#seguridad"); return; }
+    for(const q of EQUIPOS){ const i = q.modelos.findIndex(m => m.video === "vid/" + k + ".mp4"); if(i >= 0){ pendingPlay = "fv"; pendingModel = i; location.replace("#" + q.id); return; } }
+  }
   const e = byId(id);
   $("#mob").classList.remove("open"); $("#dd").classList.remove("open");
-  if(id !== lastRoute && e){ fichaState.model = (id==="phmetro" && lastRoute==="3d-sartorius") ? 1 : 0; fichaState.tab = "uso"; }
+  if(id !== lastRoute && e){ fichaState.model = pendingModel != null ? pendingModel : (id==="phmetro" && lastRoute==="3d-sartorius") ? 1 : 0; pendingModel = null; fichaState.tab = "uso"; }
   if(id === "microscopio3d"){ location.replace("#3d-microscopio"); return; }
   const is3d = id === "3d" || id.startsWith("3d-");
   X3D.hidden = !is3d; app.hidden = is3d; $("#foot").hidden = is3d; document.body.classList.toggle("lock", is3d);
@@ -1848,6 +1856,10 @@ function render(keep){
   if(e) bindFicha(e);
   if(!keep && id !== lastRoute) window.scrollTo(0, 0);
   lastRoute = id;
+  if(pendingPlay){ const el = document.getElementById(pendingPlay); pendingPlay = null;
+    const v = el && (el.tagName === "VIDEO" ? el : el.querySelector("video"));
+    if(v){ setTimeout(() => { (el.closest(".card") || v).scrollIntoView({ block:"start", behavior:"smooth" });
+      const p = v.play(); if(p && p.catch) p.catch(() => { v.muted = true; const p2 = v.play(); if(p2 && p2.catch) p2.catch(() => {}); }); }, 120); } }
 }
 buildMenus();
 addEventListener("hashchange", () => render(false));
